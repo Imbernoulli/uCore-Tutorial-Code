@@ -1,9 +1,10 @@
 #ifndef PROC_H
 #define PROC_H
 
+#include "riscv.h"
 #include "types.h"
 
-#define NPROC (16)
+#define NPROC (24)
 
 // Saved registers for kernel context switches.
 struct context {
@@ -31,10 +32,14 @@ enum procstate { UNUSED, USED, SLEEPING, RUNNABLE, RUNNING, ZOMBIE };
 struct proc {
 	enum procstate state; // Process state
 	int pid; // Process ID
-	uint64 ustack; // Virtual address of user stack
+	pagetable_t pagetable; // User page table
+	uint64 ustack;
 	uint64 kstack; // Virtual address of kernel stack
 	struct trapframe *trapframe; // data page for trampoline.S
 	struct context context; // swtch() here to run process
+	uint64 max_page;
+	uint64 program_brk;
+	uint64 heap_bottom;
 	/*
 	* LAB1: you may need to add some new fields here
 	*/
@@ -49,5 +54,7 @@ void yield();
 struct proc *allocproc();
 // swtch.S
 void swtch(struct context *, struct context *);
+
+int growproc(int n);
 
 #endif // PROC_H
