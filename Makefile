@@ -123,7 +123,7 @@ gdbserver: build/kernel
 gdbclient:
 	$(GDB) -ex "target remote localhost:15234"
 
-CHAPTER ?= $(shell git rev-parse --abbrev-ref HEAD | grep -oP 'ch\K[0-9]')
+CHAPTER ?= $(shell git rev-parse --abbrev-ref HEAD | sed -n 's/.*ch\([0-9]\).*/\1/p')
 
 BASE ?= 0
 

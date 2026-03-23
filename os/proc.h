@@ -2,6 +2,7 @@
 #define PROC_H
 
 #include "types.h"
+#include "syscall_ids.h"
 
 #define NPROC (16)
 
@@ -35,9 +36,7 @@ struct proc {
 	uint64 kstack; // Virtual address of kernel stack
 	struct trapframe *trapframe; // data page for trampoline.S
 	struct context context; // swtch() here to run process
-	/*
-	* LAB1: you may need to add some new fields here
-	*/
+	uint64 syscall_count[MAX_SYSCALL_ID];
 };
 
 struct proc *curr_proc();
